@@ -1,0 +1,24 @@
+apiVersion: v1
+entries:
+  wger:
+  - apiVersion: v2
+    appVersion: 2.1.0
+    created: "2023-07-25T16:43:43.397968152Z"
+    dependencies:
+    - name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.6.7
+    - name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 16.12.2
+    description: A Helm chart for Wger installation on Kubernetes
+    digest: 0623ef10a8a93b1446d1e56f0bc75360bc8cde1776e3d24001e5fa85fb4276f2
+    maintainers:
+    - email: roland@geider.net
+      name: rolandgeider
+    name: wger
+    type: application
+    urls:
+    - https://github.com/bbkz/wger-helm-charts/releases/download/wger-0.1.4-rc.2/wger-0.1.4-rc.2.tgz
+    version: 0.1.4-rc.2
+generated: "2023-07-25T16:43:43.397978352Z"
