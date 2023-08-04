@@ -159,7 +159,7 @@ entries:
     version: 0.1.4-rc.6
   - apiVersion: v2
     appVersion: latest
-    created: "2023-07-28T14:59:21.946598878Z"
+    created: "2023-08-04T08:27:59.981203998Z"
     dependencies:
     - condition: postgres.enabled
       name: postgres
@@ -174,15 +174,15 @@ entries:
       - groundhog2k
       version: 0.6.14
     description: A Helm chart for Wger installation on Kubernetes
-    digest: af915fa8df8b40a9a68e4747c76864619daaa29285e9b01f5e433698b72600e7
+    digest: 203cdf02064aee9210902468b35f783f0a27471f534f19fe141a5cc792ef9bf1
     maintainers:
     - email: roland@geider.net
       name: rolandgeider
     name: wger
     type: application
     urls:
-    - https://github.com/bbkz/wger-helm-charts/releases/download/wger-0.1.4-rc.5/wger-0.1.4-rc.5.tgz
-    version: 0.1.4-rc.5
+    - https://github.com/bbkz/wger-helm-charts/releases/download/wger-0.1.4-rc.6/wger-0.1.4-rc.6.tgz
+    version: 0.1.4-rc.6
   - apiVersion: v2
     appVersion: 2.2.0
     created: "2023-07-26T09:49:27.256691213Z"
@@ -288,6 +288,32 @@ entries:
     - https://github.com/bbkz/wger-helm-charts/releases/download/wger-0.1.4-rc.5/wger-0.1.4-rc.5.tgz
     version: 0.1.4-rc.5
   - apiVersion: v2
+    appVersion: latest
+    created: "2023-07-28T14:59:21.946598878Z"
+    dependencies:
+    - condition: postgres.enabled
+      name: postgres
+      repository: https://groundhog2k.github.io/helm-charts
+      tags:
+      - groundhog2k
+      version: 0.4.5
+    - condition: redis.enabled
+      name: redis
+      repository: https://groundhog2k.github.io/helm-charts
+      tags:
+      - groundhog2k
+      version: 0.6.14
+    description: A Helm chart for Wger installation on Kubernetes
+    digest: af915fa8df8b40a9a68e4747c76864619daaa29285e9b01f5e433698b72600e7
+    maintainers:
+    - email: roland@geider.net
+      name: rolandgeider
+    name: wger
+    type: application
+    urls:
+    - https://github.com/bbkz/wger-helm-charts/releases/download/wger-0.1.4-rc.5/wger-0.1.4-rc.5.tgz
+    version: 0.1.4-rc.5
+  - apiVersion: v2
     appVersion: 2.1.0
     created: "2023-07-26T05:02:39.910302729Z"
     dependencies:
@@ -359,4 +385,4 @@ entries:
     urls:
     - https://github.com/bbkz/wger-helm-charts/releases/download/wger-0.1.4-rc.2/wger-0.1.4-rc.2.tgz
     version: 0.1.4-rc.2
-generated: "2023-08-04T08:20:32.314068432Z"
+generated: "2023-08-04T08:27:59.981307099Z"
