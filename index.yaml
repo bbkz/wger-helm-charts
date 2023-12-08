@@ -3,6 +3,33 @@ entries:
   wger:
   - apiVersion: v2
     appVersion: latest
+    created: "2023-12-08T08:02:41.811146486Z"
+    dependencies:
+    - condition: postgres.enabled
+      name: postgres
+      repository: https://groundhog2k.github.io/helm-charts
+      tags:
+      - groundhog2k
+      version: 0.4.5
+    - condition: redis.enabled
+      name: redis
+      repository: https://groundhog2k.github.io/helm-charts
+      tags:
+      - groundhog2k
+      version: 0.6.14
+    description: A Helm chart for Wger installation on Kubernetes
+    digest: df2f9060dc9c625cca6909df586479a71449922ea79bc41daf86bc5022ecd106
+    maintainers:
+    - email: roland@geider.net
+      name: rolandgeider
+    - name: bbkz
+    name: wger
+    type: application
+    urls:
+    - https://github.com/bbkz/wger-helm-charts/releases/download/wger-0.1.10-rc.7/wger-0.1.10-rc.7.tgz
+    version: 0.1.10-rc.7
+  - apiVersion: v2
+    appVersion: latest
     created: "2023-12-08T07:13:38.049242614Z"
     dependencies:
     - condition: postgres.enabled
@@ -1660,4 +1687,4 @@ entries:
     urls:
     - https://github.com/bbkz/wger-helm-charts/releases/download/wger-0.1.4-rc.2/wger-0.1.4-rc.2.tgz
     version: 0.1.4-rc.2
-generated: "2023-12-08T07:13:38.049531054Z"
+generated: "2023-12-08T08:02:41.811674949Z"
