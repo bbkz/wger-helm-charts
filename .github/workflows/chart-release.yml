@@ -33,6 +33,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # https://github.com/marketplace/actions/checkout
       - name: Checkout Git code
         uses: actions/checkout@v6
         with:
@@ -43,6 +44,7 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
+      # https://github.com/Azure/setup-helm
       - name: Install Helm
         uses: azure/setup-helm@v4.3.1
         with:
@@ -52,8 +54,9 @@ jobs:
         run: |
           helm repo add groundhog2k https://groundhog2k.github.io/helm-charts
 
+      # https://github.com/marketplace/actions/helm-chart-releaser
       - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.8.1
+        uses: helm/chart-releaser-action@v1.7.0
         with:
           mark_as_latest: false
         env:
