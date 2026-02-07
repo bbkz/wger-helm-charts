@@ -301,17 +301,25 @@ echo "AXES_SENSITIVE_PARAMETERS = []" >>settings.py
 
 ## Upgrading
 
-Starting with version 2.4 wger starts making releases.
+Wger has started making releases from version 2.4, so from helm chart version 0.2.5 charts are pinned to a specific wger version.
 
-As a consequence the default `values.yaml` has set `imagePullPolicy` to `Always`, this means if the kubelet has a container image with that exact digest cached locally, the kubelet uses its cached image; otherwise, the kubelet pulls the image with the resolved digest, and uses that image to launch the container.
+```sh
+# update the repo
+helm repo update github-wger
 
-To upgrade you can restart the deployment (k8s v1.15):
+# list versions from repo
+helm search repo github-wger/wger -l --devel
 
-```bash
-kubectl -n wger rollout restart deploy wger-app wger-celery wger-celery-worker
+# list the installed version
+helm -n wger list
+
+helm upgrade \
+  --install wger github-wger/wger \
+  --version 0.2.5 \
+  -n wger \
+  --create-namespace
+  -f values.yaml
 ```
-
-For PostgreSQL and Redis upgrades, please check the Groundhog2k documentation, linked at the end.
 
 
 ### Postgres Upgrade Notes

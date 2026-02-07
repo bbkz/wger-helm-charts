@@ -1,6 +1,6 @@
 ---
 apiVersion: v2
-version: 0.2.5-rc2
+version: 0.2.5
 appVersion: 2.4
 name: wger
 description: A Helm chart for wger installation on Kubernetes
