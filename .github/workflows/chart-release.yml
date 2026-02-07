@@ -47,8 +47,6 @@ jobs:
       # https://github.com/Azure/setup-helm
       - name: Install Helm
         uses: azure/setup-helm@v4.3.1
-        with:
-          token: "${{ secrets.GITHUB_TOKEN }}"
 
       - name: Add dependent chart repositories
         run: |
