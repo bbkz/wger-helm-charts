@@ -35,9 +35,9 @@ helm upgrade \
   -f values.yaml
 ```
 
-First you may want to make a copy of [values.yaml](https://github.com/wger-project/helm-charts/blob/master/charts/wger/values.yaml) and modify it for your needs.
+First you may want to make a copy of [values.yaml](values.yaml) and modify it for your needs.
 
-There are some examples of the `values.yaml` in the [example folder](https://github.com/wger-project/helm-charts/blob/master/example/).
+There are some examples of the `values.yaml` in the [example folder](/example/).
 
 Please see the [parameters section](#parameters).
 
@@ -105,7 +105,7 @@ Celery requires persistent volumes.
 | `celery.annotations`            | Annotations                   | Dictionary | `{}`              |
 | `celery.replicas`               | Enable celery for sync        | Integer    | `1`               |
 | `celery.replicasWorker`         | Enable celery for sync        | Integer    | `1`               |
-| `celery.securityContext`        | Pod security context          | Object     | see [values.yaml](charts/wger/values.yaml) |
+| `celery.securityContext`        | Pod security context          | Object     | see [values.yaml](values.yaml) |
 | `celery.syncExercises`          | sync exercises                | Boolean    | `True`            |
 | `celery.syncImages`             | sync exercise images          | Boolean    | `True`            |
 | `celery.syncVideos`             | sync exercise videos          | Boolean    | `True`            |
@@ -195,7 +195,7 @@ Celery requires persistent volumes.
 
 | Name              | Description | Type | Default Value |
 |-------------------|-------------|------|---------------|
-| `app.environment` | Array of objects, representing additional environment variables to set for the deployment. | Array | see [_helpers.yaml](charts/wger/templates/_helpers.tpl) and [values.yaml](charts/wger/values.yaml) |
+| `app.environment` | Array of objects, representing additional environment variables to set for the deployment. | Array | see [_helpers.yaml](templates/_helpers.tpl) and [values.yaml](values.yaml) |
 
 There are more possible ENV variables, than the ones used in the deployment. Please check [prod.env](https://github.com/wger-project/docker/blob/master/config/prod.env).
 
@@ -301,9 +301,7 @@ echo "AXES_SENSITIVE_PARAMETERS = []" >>settings.py
 
 ## Upgrading
 
-wger is developped in a rolling release manner, so the docker image of the release is `:latest`, the hightest version tag `:X.x-dev` is the same as the `:latest` image. Older version tags are not changed or "bugfixed".
-
-This means we cannot upgrade with changing the image tag.
+Starting with version 2.4 wger starts making releases.
 
 As a consequence the default `values.yaml` has set `imagePullPolicy` to `Always`, this means if the kubelet has a container image with that exact digest cached locally, the kubelet uses its cached image; otherwise, the kubelet pulls the image with the resolved digest, and uses that image to launch the container.
 
@@ -453,7 +451,7 @@ Generally persistent volumes needs to be configured depending on your setup.
 
 ## Developing locally
 
-Please have a look at [DEVEL.md](DEVEL.md).
+Please have a look at [DEVEL.md](/DEVEL.md).
 
 
 ## Contact

@@ -1,3 +1,10 @@
+## 0.2.5
+
+* wger starts using releases
+* use wger version 2.4
+* minor upgrade postgres
+* major upgrade redis
+
 ## 0.2.4
 
 * support existing database

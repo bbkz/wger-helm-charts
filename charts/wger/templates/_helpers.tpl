@@ -215,7 +215,7 @@ environment:
 {{- end }}
 {{/*
  initContainer postgres command
- used for wger-app and celery containers
+ used for wger-app
 */}}
 {{- define "initContainer.pgonly.command" }}
 {{- $dbhost := .Values.app.django.existingDatabase.host | default (print .Release.Name "-postgres") | quote }}
