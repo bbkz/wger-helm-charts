@@ -8,7 +8,7 @@ app:
       registry: docker.io
       repository: wger/server
       # when tag left emtpy the Chart appversion will be taken
-      #tag: latest
+      # tag: latest
       PullPolicy: IfNotPresent
     annotations: {}
     replicas: 1
