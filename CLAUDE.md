@@ -21,6 +21,10 @@ helm template wger . --set celery.enabled=true   # render with a flag toggled
 # Lint as CI does (chart-testing). Compares against the target branch.
 ct lint --target-branch master
 
+# Golden-file template tests (run from the repo root). CI fails on any diff.
+tests/golden-test.sh
+tests/golden-test.sh --update   # after intentional changes; review git diff of tests/golden/
+
 # Install / upgrade against a live cluster
 helm upgrade --install wger . -n wger --create-namespace -f ../../example/prod_values.yaml
 ```

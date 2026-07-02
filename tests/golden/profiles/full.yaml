@@ -1,0 +1,18 @@
+# everything-enabled profile: mail, axes, redis auth, flower, ingress
+app:
+  mail:
+    enabled: true
+    server: smtp.example.com
+    user: wger@example.com
+    from_email: wger@example.com
+  axes:
+    enabled: true
+redis:
+  auth:
+    enabled: true
+celery:
+  flower:
+    enabled: true
+ingress:
+  enabled: true
+  url: golden.example.com
