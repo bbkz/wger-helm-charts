@@ -29,7 +29,7 @@ spec:
       containers:
         - name: setup-powersync-storage
           image: {{ include "wger.image" . | quote }}
-          imagePullPolicy: {{ .Values.app.global.image.PullPolicy }}
+          imagePullPolicy: {{ .Values.app.global.image.pullPolicy }}
           command: ["./manage.py", "setup-powersync-storage"]
           env:
             {{- include "wger.env" . | indent 12 }}
@@ -41,6 +41,6 @@ spec:
         # only gets endpoints once the django migrations have run
         - name: init-container
           image: {{ .Values.app.global.initImage }}
-          imagePullPolicy: {{ .Values.app.global.image.PullPolicy }}
+          imagePullPolicy: {{ .Values.app.global.image.pullPolicy }}
           command:
           {{- include "initContainer.app.command" . | indent 10 }}

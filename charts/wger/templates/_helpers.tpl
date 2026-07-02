@@ -1,8 +1,13 @@
 {{/*
  wger app image reference
  used for the wger-app, celery containers and the powersync-storage hook
+ (also guards against the pre-rename PullPolicy key, since this helper is
+ rendered on every install)
 */}}
 {{- define "wger.image" -}}
+{{- if or .Values.app.global.image.PullPolicy .Values.powersync.image.PullPolicy -}}
+{{- fail "image.PullPolicy has been renamed to image.pullPolicy - please update your values (app.global.image.pullPolicy / powersync.image.pullPolicy)" -}}
+{{- end -}}
 {{ .Values.app.global.image.registry }}/{{ .Values.app.global.image.repository }}:{{ .Values.app.global.image.tag | default .Chart.AppVersion }}
 {{- end -}}
 

@@ -33,7 +33,7 @@ spec:
       containers:
         - name: powersync
           image: "{{ .Values.powersync.image.registry }}/{{ .Values.powersync.image.repository }}:{{ .Values.powersync.image.tag }}"
-          imagePullPolicy: {{ .Values.powersync.image.PullPolicy }}
+          imagePullPolicy: {{ .Values.powersync.image.pullPolicy }}
           env:
             {{- include "database.settings" . | indent 10 }}
             {{- include "powersync.settings" . | indent 10 }}
@@ -76,7 +76,7 @@ spec:
       initContainers:
         - name: init-container
           image: {{ .Values.app.global.initImage }}
-          imagePullPolicy: {{ .Values.app.global.image.PullPolicy }}
+          imagePullPolicy: {{ .Values.app.global.image.pullPolicy }}
           command:
           {{- include "initContainer.app.command" . | indent 10 }}
       volumes:

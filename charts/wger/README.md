@@ -56,7 +56,7 @@ For additional configuration of the Groundhog2k's PostgreSQL and Redis charts, p
 | `app.global.image.registry`   | Image to use for the wger deployment                  | String  | `docker.io`   |
 | `app.global.image.repository` | Image to use for the wger deployment                  | String  | `wger/server` |
 | `app.global.image.tag`        | Takes the `Chart.yaml` `appversion` when empty. wger is developed as a rolling release | String | `latest` |
-| `app.global.image.PullPolicy` | [Pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) to use for the image | String | `IfNotPresent` |
+| `app.global.image.pullPolicy` | [Pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) to use for the image | String | `IfNotPresent` |
 | `app.global.initImage`        | Image used by the wait-for-service initContainers | String | `docker.io/busybox:1.37` |
 | `app.global.annotations`      | Annotations to attach to each resource, apart from the ingress and the persistence objects | Dictionary | `{}` |
 | `app.global.replicas`         | Number of webserver instances that should be running. | Integer | `1`           |
@@ -171,7 +171,7 @@ Celery requires persistent volumes.
 | `powersync.image.registry`    | Image registry                       | String     | `docker.io`    |
 | `powersync.image.repository`  | Image repostory                      | String     | `journeyapps/powersync-service` |
 | `powersync.image.tag`         | Image tag                            | String     | `latest`       |
-| `powersync.image.PullPolicy`  | Image pull policy                    | String     | `IfNotPresent` |
+| `powersync.image.pullPolicy`  | Image pull policy                    | String     | `IfNotPresent` |
 | `powersync.annotations`       | Annotations to attach to the service | Dictionary | `{}`           |
 | `powersync.replicas`          | Number of webserver instances that should be running | Integer | `1` |
 | `powersync.securityContext`   | Pod security context                 | Object     | see [values.yaml](charts/wger/values.yaml) |

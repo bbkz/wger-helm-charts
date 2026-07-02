@@ -33,7 +33,7 @@ spec:
         # celery beat
         - name: celery-beat
           image: {{ include "wger.image" . | quote }}
-          imagePullPolicy: {{ .Values.app.global.image.PullPolicy }}
+          imagePullPolicy: {{ .Values.app.global.image.pullPolicy }}
           env:
             {{- include "wger.env" . | indent 12 }}
             {{- include "database.settings" . | indent 10 }}
@@ -54,7 +54,7 @@ spec:
         {{- if .Values.celery.flower.enabled }}
         - name: celery-flower
           image: {{ include "wger.image" . | quote }}
-          imagePullPolicy: {{ .Values.app.global.image.PullPolicy }}
+          imagePullPolicy: {{ .Values.app.global.image.pullPolicy }}
           env:
             {{- include "wger.env" . | indent 12 }}
             {{- include "database.settings" . | indent 10 }}
@@ -76,7 +76,7 @@ spec:
       initContainers:
         - name: init-container
           image: {{ .Values.app.global.initImage }}
-          imagePullPolicy: {{ .Values.app.global.image.PullPolicy }}
+          imagePullPolicy: {{ .Values.app.global.image.pullPolicy }}
           command:
           {{- include "initContainer.app.command" . | indent 10 }}
       volumes:
@@ -122,7 +122,7 @@ spec:
         # celery worker
         - name: celery-worker
           image: {{ include "wger.image" . | quote }}
-          imagePullPolicy: {{ .Values.app.global.image.PullPolicy }}
+          imagePullPolicy: {{ .Values.app.global.image.pullPolicy }}
           env:
             {{- include "wger.env" . | indent 12 }}
             {{- include "database.settings" . | indent 10 }}
@@ -151,7 +151,7 @@ spec:
       initContainers:
       - name: init-container
         image: {{ .Values.app.global.initImage }}
-        imagePullPolicy: {{ .Values.app.global.image.PullPolicy }}
+        imagePullPolicy: {{ .Values.app.global.image.pullPolicy }}
         command:
         {{- include "initContainer.app.command" . | indent 10 }}
       volumes:

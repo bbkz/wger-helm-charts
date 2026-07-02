@@ -37,7 +37,7 @@ spec:
         # wger app container
         - name: wger
           image: {{ include "wger.image" . | quote }}
-          imagePullPolicy: {{ .Values.app.global.image.PullPolicy }}
+          imagePullPolicy: {{ .Values.app.global.image.pullPolicy }}
           env:
             {{- include "wger.env" . | indent 12 }}
             {{- include "database.settings" . | indent 10 }}
@@ -76,7 +76,7 @@ spec:
       initContainers:
         - name: init-container
           image: {{ .Values.app.global.initImage }}
-          imagePullPolicy: {{ .Values.app.global.image.PullPolicy }}
+          imagePullPolicy: {{ .Values.app.global.image.pullPolicy }}
           command:
           {{- include "initContainer.pgonly.command" . | indent 10 }}
       volumes:

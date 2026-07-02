@@ -9,7 +9,7 @@ app:
       repository: wger/server
       # when tag left emtpy the Chart appversion will be taken
       # tag: latest
-      PullPolicy: IfNotPresent
+      pullPolicy: IfNotPresent
     # image for the wait-for-service initContainers (needs /bin/sh and nc)
     initImage: docker.io/busybox:1.37
     annotations: {}
@@ -146,7 +146,7 @@ powersync:
     registry: docker.io
     repository: journeyapps/powersync-service
     tag: latest
-    PullPolicy: IfNotPresent
+    pullPolicy: IfNotPresent
   annotations: {}
   replicas: 1
   securityContext:
