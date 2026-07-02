@@ -42,9 +42,6 @@ app:
     annotations: {}
     type: ClusterIP
     port: 8000
-  # number of reverse proxies involved
-  # used for rest api and axes
-  proxyCount: 1
   django:
     secret:
       name: "django"
@@ -152,7 +149,6 @@ powersync:
     PullPolicy: IfNotPresent
   annotations: {}
   replicas: 1
-  replicasWorker: 1
   securityContext:
     fsGroup: 1000
   serviceApi:

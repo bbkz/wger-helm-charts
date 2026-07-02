@@ -116,7 +116,7 @@ Celery requires persistent volumes.
 | `celery.enabled`                 | Enable celery for sync        | Boolean    | `True`            |
 | `celery.annotations`             | Annotations                   | Dictionary | `{}`              |
 | `celery.replicas`                | Enable celery for sync        | Integer    | `1`               |
-| `celery.replicasWorker`          | Enable celery for sync        | Integer    | `1`               |
+| `celery.replicasWorker`          | Number of celery worker replicas | Integer    | `1`               |
 | `celery.workerConcurrency`       | Set to one if using sqlite    | Integer    | `4`               |
 | `celery.securityContext`         | Pod security context          | Object     | see [values.yaml](values.yaml) |
 | `celery.syncExercises`           | sync exercises                | Boolean    | `True`            |
@@ -174,7 +174,6 @@ Celery requires persistent volumes.
 | `powersync.image.PullPolicy`  | Image pull policy                    | String     | `IfNotPresent` |
 | `powersync.annotations`       | Annotations to attach to the service | Dictionary | `{}`           |
 | `powersync.replicas`          | Number of webserver instances that should be running | Integer | `1` |
-| `powersync.replicasWorker`    | Number replica workers               | Integer    | `1`            |
 | `powersync.securityContext`   | Pod security context                 | Object     | see [values.yaml](charts/wger/values.yaml) |
 | `powersync.serviceApi.type`        | Sets the http service type            | String     | `ClusterIP`    |
 | `powersync.serviceApi.port`        | Port for the service                  | Integer    | `8080`         |
