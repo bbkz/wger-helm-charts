@@ -71,7 +71,6 @@ spec:
             - name: flower
               containerPort: 5555
               protocol: TCP
-        # {{/*- if .Values.celery.flower.enabled */}}
         {{- end }}
       initContainers:
         - name: init-container
@@ -161,5 +160,4 @@ spec:
         - name: wger-celery-beat
           persistentVolumeClaim:
             claimName: {{ .Values.app.persistence.existingClaim.celeryBeat | default "wger-celery-beat" | quote }}
-# {{/*- if .Values.celery.enabled */}}
 {{- end }}
