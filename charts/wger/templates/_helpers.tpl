@@ -1,4 +1,23 @@
 {{/*
+ wger app image reference
+ used for the wger-app, celery containers and the powersync-storage hook
+*/}}
+{{- define "wger.image" -}}
+{{ .Values.app.global.image.registry }}/{{ .Values.app.global.image.repository }}:{{ .Values.app.global.image.tag | default .Chart.AppVersion }}
+{{- end -}}
+
+{{/*
+ common resource labels, appended to the per-resource app.kubernetes.io/name.
+ Not used in pod template / selector labels: selectors are immutable.
+*/}}
+{{- define "wger.labels" -}}
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/version: {{ .Values.app.global.image.tag | default .Chart.AppVersion | quote }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+{{- end }}
+
+{{/*
  wger default environment definition
  used for wger-app and celery containers
 */}}

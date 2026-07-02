@@ -6,9 +6,7 @@ metadata:
   name: wger-media
   {{- with .Values.app.persistence.annotations }}
   annotations:
-  {{- range $key, $value := . }}
-    {{ $key }}: {{ $value | quote}}
-  {{- end }}
+    {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
   accessModes:
@@ -28,9 +26,7 @@ metadata:
   name: wger-static
   {{- with .Values.app.persistence.annotations }}
   annotations:
-  {{- range $key, $value := . }}
-    {{ $key }}: {{ $value | quote}}
-  {{- end }}
+    {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
   accessModes:
@@ -50,9 +46,7 @@ metadata:
   name: wger-celery-beat
   {{- with .Values.app.persistence.annotations }}
   annotations:
-  {{- range $key, $value := . }}
-    {{ $key }}: {{ $value | quote}}
-  {{- end }}
+    {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
   accessModes:

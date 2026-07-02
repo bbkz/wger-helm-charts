@@ -5,6 +5,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: {{ .Release.Name }}
+    {{- include "wger.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.app.global.replicas }}
   selector:
@@ -17,11 +18,9 @@ spec:
       annotations:
         # restart when the mounted nginx config changes
         checksum/config: {{ include (print $.Template.BasePath "/configmap-nginx.yaml") . | sha256sum }}
-    {{- with .Values.app.global.annotations }}
-      {{- range $key, $value := . }}
-        {{ $key }}: {{ $value | quote}}
-      {{- end }}
-    {{- end }}
+        {{- with .Values.app.global.annotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       {{- with .Values.app.global.securityContext }}
       securityContext:

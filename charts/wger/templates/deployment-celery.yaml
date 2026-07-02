@@ -6,6 +6,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: {{ .Release.Name }}
+    {{- include "wger.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.celery.replicas }}
   strategy:
@@ -20,11 +21,9 @@ spec:
         app.kubernetes.io/name: {{ .Release.Name }}-celery
       annotations:
         {{- include "wger.rollme.annotations" . | indent 8 }}
-    {{- with .Values.celery.annotations }}
-      {{- range $key, $value := . }}
-        {{ $key }}: {{ $value | quote}}
-      {{- end }}
-    {{- end }}
+        {{- with .Values.celery.annotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       {{- with .Values.celery.securityContext }}
       securityContext:
@@ -33,7 +32,7 @@ spec:
       containers:
         # celery beat
         - name: celery-beat
-          image: "{{ .Values.app.global.image.registry }}/{{ .Values.app.global.image.repository }}:{{ .Values.app.global.image.tag | default .Chart.AppVersion }}"
+          image: {{ include "wger.image" . | quote }}
           imagePullPolicy: {{ .Values.app.global.image.PullPolicy }}
           env:
             {{- include "wger.env" . | indent 12 }}
@@ -54,7 +53,7 @@ spec:
         # celery flower
         {{- if .Values.celery.flower.enabled }}
         - name: celery-flower
-          image: "{{ .Values.app.global.image.registry }}/{{ .Values.app.global.image.repository }}:{{ .Values.app.global.image.tag | default .Chart.AppVersion }}"
+          image: {{ include "wger.image" . | quote }}
           imagePullPolicy: {{ .Values.app.global.image.PullPolicy }}
           env:
             {{- include "wger.env" . | indent 12 }}
@@ -92,11 +91,10 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: {{ .Release.Name }}
+    {{- include "wger.labels" . | nindent 4 }}
   {{- with .Values.celery.annotations }}
   annotations:
-    {{- range $key, $value := . }}
-      {{ $key }}: {{ $value | quote}}
-    {{- end }}
+    {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
   replicas: {{ .Values.celery.replicasWorker }}
@@ -112,11 +110,9 @@ spec:
         app.kubernetes.io/name: {{ .Release.Name }}-celery-worker
       annotations:
         {{- include "wger.rollme.annotations" . | indent 8 }}
-    {{- with .Values.celery.annotations }}
-      {{- range $key, $value := . }}
-        {{ $key }}: {{ $value | quote}}
-      {{- end }}
-    {{- end }}
+        {{- with .Values.celery.annotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       {{- with .Values.celery.securityContext }}
       securityContext:
@@ -125,7 +121,7 @@ spec:
       containers:
         # celery worker
         - name: celery-worker
-          image: "{{ .Values.app.global.image.registry }}/{{ .Values.app.global.image.repository }}:{{ .Values.app.global.image.tag | default .Chart.AppVersion }}"
+          image: {{ include "wger.image" . | quote }}
           imagePullPolicy: {{ .Values.app.global.image.PullPolicy }}
           env:
             {{- include "wger.env" . | indent 12 }}

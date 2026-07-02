@@ -48,6 +48,7 @@ Subcharts: **postgres** and **redis** come from the [groundhog2k](https://ground
 
 This is the heart of the chart and where most behavior lives. Key named templates:
 
+- **`wger.image`** / **`wger.labels`** — the wger image reference and the common resource labels (instance/version/managed-by/chart). `wger.labels` is metadata-only: never add it (or new keys) to pod template / selector labels — selectors are immutable.
 - **`wger.env.default`** — builds the full default env list (email, cache/redis, django, axes brute-force protection, JWT, gunicorn tuning, exercise sync). Celery-related vars are only emitted when `celery.enabled`.
 - **`wger.env`** — merges `wger.env.default` with user-supplied `app.environment` entries, letting users **override any default var by name** (custom entries with a matching name replace the default). Use this, not the raw default, when adding env to containers.
 - **`wger.env.secrets`** — the secret-backed env entries shared by the app and all celery containers: django `SECRET_KEY`, mail password, `CELERY_BROKER`/`CELERY_BACKEND` URLs (with or without redis auth), flower password.
