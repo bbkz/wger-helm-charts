@@ -38,7 +38,7 @@ The chart renders **five separate Deployments** (one `templates/deployment-<comp
 
 - **`-app`** (`deployment-wger.yaml`) — the wger Django server (gunicorn). Has a busybox initContainer (`initContainer.pgonly.command`) that blocks until postgres and redis are reachable.
 - **`-nginx`** — reverse proxy serving Django's media/static files; gated on production setups needing persistent storage.
-- **`-powersync`** — `journeyapps/powersync-service` for the mobile app's offline sync. Connects to the same postgres DB via a dedicated `powersync` DB user. Its storage schema is initialized by a **post-install hook Job** (`templates/hooks/setup-powersync-storage.yaml`) that waits for postgres/redis/nginx, then `kubectl exec`s `./manage.py setup-powersync-storage` in the running app pod. This requires the django DB user to be a superuser, granted via the `wger-pg-init` ConfigMap (`configmap-postgres.yaml`) mounted as a postgres init script.
+- **`-powersync`** — `journeyapps/powersync-service` for the mobile app's offline sync. Connects to the same postgres DB via a dedicated `powersync` DB user. Its storage schema is initialized by a **post-install hook Job** (`templates/hooks/setup-powersync-storage.yaml`) that runs `./manage.py setup-powersync-storage` in its own pod using the wger image and the same env as the app container (no RBAC needed); an initContainer waits for postgres/redis and the app service (endpoints appear only after migrations). This requires the django DB user to be a superuser, granted via the `wger-pg-init` ConfigMap (`configmap-postgres.yaml`) mounted as a postgres init script.
 - **`-celery`** — celery-beat scheduler + optional celery-flower web UI. Only meaningful when `celery.enabled=true`.
 - **`-celery-worker`** — celery task workers. Its initContainer (`initContainer.web.command`) additionally waits for the nginx service.
 
@@ -65,10 +65,7 @@ JWT keys are special: `templates/hooks/jwt-keygen.yaml` runs a **pre-install/upg
 
 ### RBAC for hook Jobs
 
-`serviceaccount.yaml`, `role.yaml`, and `rolebinding.yaml` (all pre-install/upgrade/rollback hooks) define **two ServiceAccounts** for the hook Jobs:
-
-- `{{ .Release.Name }}-keygen` → bound to `{{ .Release.Name }}-secret-role` (create/patch/update/get on secrets) — used by the JWT keygen Job.
-- `{{ .Release.Name }}-powersync-initdb` → bound to `{{ .Release.Name }}-pod-exec-role` (get/list on pods, create on `pods/exec`) — used by the powersync storage-setup Job.
+`serviceaccount.yaml`, `role.yaml`, and `rolebinding.yaml` (all pre-install/upgrade/rollback hooks) define one ServiceAccount: `{{ .Release.Name }}-keygen`, bound to `{{ .Release.Name }}-secret-role` (create/patch/update/get on secrets), used by the JWT keygen Job. The powersync storage-setup Job needs no RBAC — it talks only to the database.
 
 ## Conventions
 
