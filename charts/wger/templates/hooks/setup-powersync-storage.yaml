@@ -40,7 +40,7 @@ spec:
         # wait for postgres, redis and a ready wger app pod — the app service
         # only gets endpoints once the django migrations have run
         - name: init-container
-          image: docker.io/busybox:latest
+          image: {{ .Values.app.global.initImage }}
           imagePullPolicy: {{ .Values.app.global.image.PullPolicy }}
           command:
           {{- include "initContainer.app.command" . | indent 10 }}

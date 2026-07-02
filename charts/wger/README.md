@@ -56,7 +56,8 @@ For additional configuration of the Groundhog2k's PostgreSQL and Redis charts, p
 | `app.global.image.registry`   | Image to use for the wger deployment                  | String  | `docker.io`   |
 | `app.global.image.repository` | Image to use for the wger deployment                  | String  | `wger/server` |
 | `app.global.image.tag`        | Takes the `Chart.yaml` `appversion` when empty. wger is developed as a rolling release | String | `latest` |
-| `app.global.image.PullPolicy` | [Pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) to use for the image | String | `Always` |
+| `app.global.image.PullPolicy` | [Pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) to use for the image | String | `IfNotPresent` |
+| `app.global.initImage`        | Image used by the wait-for-service initContainers | String | `docker.io/busybox:1.37` |
 | `app.global.annotations`      | Annotations to attach to each resource, apart from the ingress and the persistence objects | Dictionary | `{}` |
 | `app.global.replicas`         | Number of webserver instances that should be running. | Integer | `1`           |
 | `app.global.securityContext`  | Pod security context                                  | Object  | see [values.yaml](charts/wger/values.yaml) |
@@ -133,6 +134,7 @@ Celery requires persistent volumes.
 
 | Name                           | Description                              | Type    | Default Value     |
 |--------------------------------|------------------------------------------|---------|-------------------|
+| `app.jwt.keygenImage`          | Image used by the JWT keygen hook job    | String  | `docker.io/alpine:3.22` |
 | `app.jwt.secret.name`          | Name of the secret                       | String  | `jwt`             |
 | `app.jwt.secret.update`        | Update content of the current secret     | Boolean | `false`           |
 | `app.jwt.secret.privateKey`    | Private Key for JWT                      | String  | auto created new key |

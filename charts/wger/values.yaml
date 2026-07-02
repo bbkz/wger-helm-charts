@@ -10,6 +10,8 @@ app:
       # when tag left emtpy the Chart appversion will be taken
       # tag: latest
       PullPolicy: IfNotPresent
+    # image for the wait-for-service initContainers (needs /bin/sh and nc)
+    initImage: docker.io/busybox:1.37
     annotations: {}
     replicas: 1
     securityContext:
@@ -77,6 +79,8 @@ app:
         dbpwKey: USERDB_PASSWORD
   # JWT auth
   jwt:
+    # image for the keygen hook job (needs apk to install jose/python3/kubectl)
+    keygenImage: docker.io/alpine:3.22
     secret:
       name: "jwt"
       # JWT keys, used by the mobile app.

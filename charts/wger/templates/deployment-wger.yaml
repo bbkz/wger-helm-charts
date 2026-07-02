@@ -75,7 +75,7 @@ spec:
             {{- end }}
       initContainers:
         - name: init-container
-          image: docker.io/busybox:latest
+          image: {{ .Values.app.global.initImage }}
           imagePullPolicy: {{ .Values.app.global.image.PullPolicy }}
           command:
           {{- include "initContainer.pgonly.command" . | indent 10 }}

@@ -20,7 +20,7 @@ spec:
       serviceAccountName: {{ .Release.Name }}-keygen
       containers:
         - name: keygen
-          image: alpine:latest
+          image: {{ .Values.app.jwt.keygenImage }}
           command:
             - sh
             - -c

@@ -75,8 +75,8 @@ spec:
           {{- end }}
       initContainers:
         - name: init-container
-          image: docker.io/alpine:latest
-          imagePullPolicy: {{ .Values.powersync.image.PullPolicy }}
+          image: {{ .Values.app.global.initImage }}
+          imagePullPolicy: {{ .Values.app.global.image.PullPolicy }}
           command:
           {{- include "initContainer.app.command" . | indent 10 }}
       volumes:
