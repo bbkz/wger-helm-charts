@@ -50,6 +50,7 @@ This is the heart of the chart and where most behavior lives. Key named template
 
 - **`wger.env.default`** — builds the full default env list (email, cache/redis, django, axes brute-force protection, JWT, gunicorn tuning, exercise sync). Celery-related vars are only emitted when `celery.enabled`.
 - **`wger.env`** — merges `wger.env.default` with user-supplied `app.environment` entries, letting users **override any default var by name** (custom entries with a matching name replace the default). Use this, not the raw default, when adding env to containers.
+- **`wger.env.secrets`** — the secret-backed env entries shared by the app and all celery containers: django `SECRET_KEY`, mail password, `CELERY_BROKER`/`CELERY_BACKEND` URLs (with or without redis auth), flower password.
 - **`database.settings`** — emits `DJANGO_DB_*` env. Branches three ways: in-cluster postgres (reads the groundhog2k-created `{Release}-postgres` secret), an `existingDatabase` with inline credentials, or an `existingDatabase.existingSecret` (keys default to `USERDB_USER` / `USERDB_PASSWORD` / `USERDB_NAME`).
 - **`powersync.settings`** — builds the powersync DB URIs by referencing both the `powersync` and django DB secrets; relies on `$(VAR)` shell-style interpolation across env entries.
 

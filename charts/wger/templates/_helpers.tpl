@@ -173,6 +173,54 @@ environment:
 {{- end }}
 
 {{/*
+ secret-backed environment entries: django SECRET_KEY, mail password,
+ celery broker/backend URLs (with or without redis authentication) and
+ the flower password
+ used for wger-app and celery containers
+*/}}
+{{- define "wger.env.secrets" }}
+  - name: SECRET_KEY
+    valueFrom:
+      secretKeyRef:
+        name: {{ .Values.app.django.secret.name | default "django" | quote }}
+        key: "secret-key"
+  {{- if .Values.app.mail.enabled }}
+  - name: EMAIL_HOST_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: {{ .Values.app.mail.secret.name | default "mail" | quote }}
+        key: {{ .Values.app.mail.secret.key | default "mail-password" | quote }}
+  {{- end }}
+  {{- /*
+   to enable redis authentication additional settings in the values
+   must be made, passed to the redis container
+  */}}
+  {{- if .Values.redis.auth.enabled }}
+  - name: DJANGO_CACHE_CLIENT_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: "redis"
+        key: "redis-password"
+  - name: CELERY_BROKER
+    value: "redis://:$(DJANGO_CACHE_CLIENT_PASSWORD)@{{ .Release.Name }}-redis:{{ int .Values.redis.service.serverPort }}/2"
+  - name: CELERY_BACKEND
+    value: "redis://:$(DJANGO_CACHE_CLIENT_PASSWORD)@{{ .Release.Name }}-redis:{{ int .Values.redis.service.serverPort }}/2"
+  {{- else }}
+  - name: CELERY_BROKER
+    value: "redis://{{ .Release.Name }}-redis:{{ int .Values.redis.service.serverPort }}/2"
+  - name: CELERY_BACKEND
+    value: "redis://{{ .Release.Name }}-redis:{{ int .Values.redis.service.serverPort }}/2"
+  {{- end }}
+  {{- if .Values.celery.flower.enabled }}
+  - name: CELERY_FLOWER_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: {{ .Values.celery.flower.secret.name | default "flower" | quote }}
+        key: "password"
+  {{- end }}
+{{- end }}
+
+{{/*
  database settings
  used for wger-app, celery and powersync containers
 */}}
