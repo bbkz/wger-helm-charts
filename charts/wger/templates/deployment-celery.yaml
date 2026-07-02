@@ -19,8 +19,7 @@ spec:
       labels:
         app.kubernetes.io/name: {{ .Release.Name }}-celery
       annotations:
-        # restart on upgrade
-        rollme: {{ randAlphaNum 5 | quote }}
+        {{- include "wger.rollme.annotations" . | indent 8 }}
     {{- with .Values.celery.annotations }}
       {{- range $key, $value := . }}
         {{ $key }}: {{ $value | quote}}
@@ -112,8 +111,7 @@ spec:
       labels:
         app.kubernetes.io/name: {{ .Release.Name }}-celery-worker
       annotations:
-        # restart on upgrade
-        rollme: {{ randAlphaNum 5 | quote }}
+        {{- include "wger.rollme.annotations" . | indent 8 }}
     {{- with .Values.celery.annotations }}
       {{- range $key, $value := . }}
         {{ $key }}: {{ $value | quote}}

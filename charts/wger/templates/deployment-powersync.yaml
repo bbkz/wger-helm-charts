@@ -18,8 +18,9 @@ spec:
       labels:
         app.kubernetes.io/name: {{ .Release.Name }}-powersync
       annotations:
-        # restart on upgrade
-        rollme: {{ randAlphaNum 5 | quote }}
+        {{- include "wger.rollme.annotations" . | indent 8 }}
+        # restart when the mounted powersync config changes
+        checksum/config: {{ include (print $.Template.BasePath "/configmap-powersync.yaml") . | sha256sum }}
     {{- with .Values.powersync.annotations }}
       {{- range $key, $value := . }}
         {{ $key }}: {{ $value | quote}}

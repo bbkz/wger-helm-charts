@@ -367,6 +367,42 @@ environment:
 {{- end }}
 
 {{/*
+ checksum over all values that end up in secrets referenced by the pods.
+ Used as a pod template annotation so pods restart when a secret's content
+ changes: secret values are resolved at container start via secretKeyRef,
+ so a change in the secret alone does not alter the pod spec and would
+ otherwise not trigger a rollout.
+*/}}
+{{- define "wger.checksum.secrets" -}}
+{{- dict "django" .Values.app.django.secret
+         "database" .Values.app.django.existingDatabase
+         "postgres" .Values.postgres.settings
+         "postgresUser" .Values.postgres.userDatabase
+         "mail" .Values.app.mail.secret
+         "redis" .Values.redis.auth
+         "flower" .Values.celery.flower.secret
+         "jwt" .Values.app.jwt.secret
+         "powersync" .Values.powersync.secretDatabase
+    | toJson | sha256sum -}}
+{{- end -}}
+
+{{/*
+ pod template annotations driving restarts on config changes
+ used for wger-app and celery pods (powersync adds a configmap checksum)
+*/}}
+{{- define "wger.rollme.annotations" }}
+checksum/secrets: {{ include "wger.checksum.secrets" . }}
+{{- /*
+ while jwt.secret.update is set and no key is supplied, the keygen hook
+ generates fresh random keys on every upgrade; no checksum can see that,
+ so force a restart the old-fashioned way
+*/}}
+{{- if and .Values.app.jwt.secret.update (not .Values.app.jwt.secret.privateKey) }}
+rollme: {{ randAlphaNum 5 | quote }}
+{{- end }}
+{{- end }}
+
+{{/*
  "manipulateXX" definitions
  used for secret creation or update
 */}}

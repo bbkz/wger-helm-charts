@@ -18,8 +18,7 @@ spec:
       labels:
         app.kubernetes.io/name: {{ .Release.Name }}-app
       annotations:
-        # restart on upgrade
-        rollme: {{ randAlphaNum 5 | quote }}
+        {{- include "wger.rollme.annotations" . | indent 8 }}
     {{- with .Values.app.global.annotations }}
       {{- range $key, $value := . }}
         {{ $key }}: {{ $value | quote}}

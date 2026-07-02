@@ -53,6 +53,7 @@ This is the heart of the chart and where most behavior lives. Key named template
 - **`wger.env.secrets`** — the secret-backed env entries shared by the app and all celery containers: django `SECRET_KEY`, mail password, `CELERY_BROKER`/`CELERY_BACKEND` URLs (with or without redis auth), flower password.
 - **`database.settings`** — emits `DJANGO_DB_*` env. Branches three ways: in-cluster postgres (reads the groundhog2k-created `{Release}-postgres` secret), an `existingDatabase` with inline credentials, or an `existingDatabase.existingSecret` (keys default to `USERDB_USER` / `USERDB_PASSWORD` / `USERDB_NAME`).
 - **`powersync.settings`** — builds the powersync DB URIs by referencing both the `powersync` and django DB secrets; relies on `$(VAR)` shell-style interpolation across env entries.
+- **`wger.rollme.annotations`** — pod-template annotations that drive restarts on upgrade: a `checksum/secrets` hash (via `wger.checksum.secrets`) over every value that feeds a referenced secret, plus a `rollme` random value **only** while `app.jwt.secret.update=true` with no key supplied (hook regenerates keys each upgrade, invisible to checksums). Deployments mounting a ConfigMap (nginx, powersync) additionally carry a `checksum/config` hash of the ConfigMap template. Pods therefore restart only when their config actually changes — never add an unconditional `rollme`.
 
 When changing app configuration, prefer editing the `wger.env.default` template over hardcoding env in the Deployment.
 
