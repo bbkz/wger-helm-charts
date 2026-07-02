@@ -34,7 +34,7 @@ spec:
           imagePullPolicy: {{ .Values.nginx.imagePullPolicy }}
           env:
             - name: TZ
-              value: {{ .Values.app.timezone | default "UTC" | quote }}
+              value: {{ .Values.app.timezone | quote }}
           ports:
             - name: http
               containerPort: 80

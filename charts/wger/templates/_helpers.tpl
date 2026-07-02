@@ -6,9 +6,9 @@
 environment:
   # general
   - name: TZ
-    value: {{ .Values.app.timezone | default "UTC" | quote }}
+    value: {{ .Values.app.timezone | quote }}
   - name: TIME_ZONE
-    value: {{ .Values.app.timezone | default "UTC" | quote }}
+    value: {{ .Values.app.timezone | quote }}
   # email settings
   {{- if .Values.app.mail.enabled }}
   - name: ENABLE_EMAIL
@@ -16,7 +16,7 @@ environment:
   - name: EMAIL_HOST
     value: {{ .Values.app.mail.server | quote }}
   - name: EMAIL_PORT
-    value: {{ .Values.app.mail.port | default "587" | quote }}
+    value: {{ .Values.app.mail.port | quote }}
   - name: EMAIL_HOST_USER
     value: {{ .Values.app.mail.user | quote }}
   - name: FROM_EMAIL
@@ -33,7 +33,7 @@ environment:
   - name: DJANGO_PERFORM_MIGRATIONS
     value: "True"
   - name: DJANGO_DB_ENGINE
-    value: {{ .Values.app.django.existingDatabase.engine | default "django.db.backends.postgresql" | quote }}
+    value: {{ .Values.app.django.existingDatabase.engine | quote }}
   # cache
   - name: DJANGO_CACHE_BACKEND
     value: "django_redis.cache.RedisCache"
@@ -42,7 +42,7 @@ environment:
   - name: DJANGO_CACHE_CLIENT_CLASS
     value: "django_redis.client.DefaultClient"
   - name: DJANGO_CACHE_TIMEOUT
-    value: {{ int .Values.app.django.cache.timeout | default "1296000" | quote }}
+    value: {{ int .Values.app.django.cache.timeout | quote }}
   - name: EXERCISE_CACHE_TTL
     value: "2419200"
   # django general
@@ -68,7 +68,7 @@ environment:
   # only nginx is. Change as approtriate if your setup differs. Also note that this
   # is only used when throttling API requests.
   - name: NUMBER_OF_PROXIES
-    value: {{ int .Values.app.global.proxyCount | default "1" | quote }}
+    value: {{ int .Values.app.global.proxyCount | quote }}
   # axes
   - name: AXES_ENABLED
   {{- if .Values.app.axes.enabled }}
@@ -77,23 +77,23 @@ environment:
     value: "False"
   {{- end }}
   - name: AXES_LOCKOUT_PARAMETERS
-    value: {{ .Values.app.axes.lockoutParameters | default "ip_address" | quote }}
+    value: {{ .Values.app.axes.lockoutParameters | quote }}
   - name: AXES_FAILURE_LIMIT
-    value: {{ int .Values.app.axes.failureLimit | default "10" | quote }}
+    value: {{ int .Values.app.axes.failureLimit | quote }}
   - name: AXES_COOLOFF_TIME
-    value: {{ int .Values.app.axes.cooloffTime | default "30" | quote }}
+    value: {{ int .Values.app.axes.cooloffTime | quote }}
   - name: AXES_IPWARE_PROXY_COUNT
-    value: {{ int .Values.app.global.proxyCount | default "1" | quote }}
+    value: {{ int .Values.app.global.proxyCount | quote }}
     # @todo bad default, use the default from axes REMOTE_ADDR only
   - name: AXES_IPWARE_META_PRECEDENCE_ORDER
-    value: {{ .Values.app.axes.ipwareMetaPrecedenceOrder | default "HTTP_X_FORWARDED_FOR,REMOTE_ADDR" | quote }}
+    value: {{ .Values.app.axes.ipwareMetaPrecedenceOrder | quote }}
   - name: AXES_HANDLER
     value: "axes.handlers.cache.AxesCacheHandler"
   # jwt auth
   - name: ACCESS_TOKEN_LIFETIME
-    value: {{ int .Values.app.jwt.accessTokenLifetime | default "10" | quote }}
+    value: {{ int .Values.app.jwt.accessTokenLifetime | quote }}
   - name: REFRESH_TOKEN_LIFETIME
-    value: {{ int .Values.app.jwt.refreshTokenLifetime | default "2880" | quote }}
+    value: {{ int .Values.app.jwt.refreshTokenLifetime | quote }}
   # gunicorn settings
   - name: WGER_USE_GUNICORN
     value: "True"
@@ -125,19 +125,19 @@ environment:
   - name: USE_CELERY
     value: "True"
   - name: SYNC_EXERCISES_CELERY
-    value: {{ .Values.celery.syncExercises | default "True" | quote }}
+    value: {{ .Values.celery.syncExercises | quote }}
   - name: SYNC_EXERCISE_IMAGES_CELERY
-    value: {{ .Values.celery.syncImages | default "True" | quote }}
+    value: {{ .Values.celery.syncImages | quote }}
   - name: SYNC_EXERCISE_VIDEOS_CELERY
-    value: {{ .Values.celery.syncVideos | default "True" | quote }}
+    value: {{ .Values.celery.syncVideos | quote }}
   - name: DOWNLOAD_INGREDIENTS_FROM
-    value: {{ .Values.celery.ingredientsFrom | default "WGER" | quote }}
+    value: {{ .Values.celery.ingredientsFrom | quote }}
   - name: CELERY_WORKER_CONCURRENCY
-    value: {{ .Values.celery.workerConcurrency | default "4" | quote }}
+    value: {{ .Values.celery.workerConcurrency | quote }}
   - name: CACHE_API_EXERCISES_CELERY
-    value: {{ .Values.celery.warmupExercisesCache | default "True" | quote }}
+    value: {{ .Values.celery.warmupExercisesCache | quote }}
   - name: CACHE_API_EXERCISES_CELERY_FORCE_UPDATE
-    value: {{ .Values.celery.warmupExercisesCacheAll | default "True" | quote }}
+    value: {{ .Values.celery.warmupExercisesCacheAll | quote }}
   {{- end }}
 {{- end }}
 
@@ -182,14 +182,14 @@ environment:
   - name: SECRET_KEY
     valueFrom:
       secretKeyRef:
-        name: {{ .Values.app.django.secret.name | default "django" | quote }}
+        name: {{ .Values.app.django.secret.name | quote }}
         key: "secret-key"
   {{- if .Values.app.mail.enabled }}
   - name: EMAIL_HOST_PASSWORD
     valueFrom:
       secretKeyRef:
-        name: {{ .Values.app.mail.secret.name | default "mail" | quote }}
-        key: {{ .Values.app.mail.secret.key | default "mail-password" | quote }}
+        name: {{ .Values.app.mail.secret.name | quote }}
+        key: {{ .Values.app.mail.secret.key | quote }}
   {{- end }}
   {{- /*
    to enable redis authentication additional settings in the values
@@ -215,7 +215,7 @@ environment:
   - name: CELERY_FLOWER_PASSWORD
     valueFrom:
       secretKeyRef:
-        name: {{ .Values.celery.flower.secret.name | default "flower" | quote }}
+        name: {{ .Values.celery.flower.secret.name | quote }}
         key: "password"
   {{- end }}
 {{- end }}
@@ -234,21 +234,21 @@ environment:
     valueFrom:
       secretKeyRef:
         name: {{ .Values.app.django.existingDatabase.existingSecret.name | default (print .Release.Name "-existing-database") | quote }}
-        key: {{ .Values.app.django.existingDatabase.existingSecret.dbuserKey | default "USERDB_USER" | quote }}
+        key: {{ .Values.app.django.existingDatabase.existingSecret.dbuserKey | quote }}
   - name: DJANGO_DB_PASSWORD
     valueFrom:
       secretKeyRef:
         name: {{ .Values.app.django.existingDatabase.existingSecret.name | default (print .Release.Name "-existing-database") | quote }}
-        key: {{ .Values.app.django.existingDatabase.existingSecret.dbpwKey | default "USERDB_PASSWORD" | quote }}
+        key: {{ .Values.app.django.existingDatabase.existingSecret.dbpwKey | quote }}
     {{- if .Values.app.django.existingDatabase.existingSecret.dbnameKey }}
   - name: DJANGO_DB_DATABASE
     valueFrom:
       secretKeyRef:
         name: {{ .Values.app.django.existingDatabase.existingSecret.name | default (print .Release.Name "-existing-database") | quote }}
-        key: {{ .Values.app.django.existingDatabase.existingSecret.dbnameKey | default "USERDB_NAME" | quote }}
+        key: {{ .Values.app.django.existingDatabase.existingSecret.dbnameKey | quote }}
     {{- else }}
   - name: DJANGO_DB_DATABASE
-    value: {{ .Values.app.django.existingDatabase.dbname | default "wger" | quote }}
+    value: {{ .Values.app.django.existingDatabase.dbname | quote }}
     {{- end }}
   {{- else }}
   - name: DJANGO_DB_USER
@@ -278,12 +278,12 @@ environment:
   - name: JWT_PRIVATE_KEY
     valueFrom:
       secretKeyRef:
-        name: {{ .Values.app.jwt.secret.name | default "jwt" | quote }}
+        name: {{ .Values.app.jwt.secret.name | quote }}
         key: "private-key"
   - name: JWT_PUBLIC_KEY
     valueFrom:
       secretKeyRef:
-        name: {{ .Values.app.jwt.secret.name | default "jwt" | quote }}
+        name: {{ .Values.app.jwt.secret.name | quote }}
         key: "public-key"
   # This is the path (inside the container) to the YAML config file
   # Alternatively the config path can be specified in the command
@@ -296,11 +296,7 @@ environment:
   # or e.g.: Via a command line parameter
   #    command: ['start', '-r', 'unified', '-c64', '[base64 encoded content]']
   - name: POWERSYNC_CONFIG_PATH
-    {{- if .Values.powersync.configPath }}
     value: {{ .Values.powersync.configPath | quote }}
-    {{- else }}
-    value: "/config/powersync.yaml"
-    {{- end }}
   # Sync rules can be specified as base 64 encoded YAML
   # e.g: Via an environment variable
   # POWERSYNC_SYNC_RULES_B64: "[base64 encoded sync rules]"
@@ -353,7 +349,7 @@ environment:
 {{- define "initContainer.app.command" }}
 {{- $dbhost := .Values.app.django.existingDatabase.host | default (print .Release.Name "-postgres") | quote }}
 {{- $dbport := .Values.app.django.existingDatabase.port | default .Values.postgres.service.port | int | quote }}
-{{- $svcport := .Values.app.service.port | default 8000 | int | quote }}
+{{- $svcport := .Values.app.service.port | int | quote }}
 - /bin/sh
 - -c
 # sleep 35; wait for terminationGracePeriodSeconds of the wger-app container

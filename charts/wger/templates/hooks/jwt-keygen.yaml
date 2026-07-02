@@ -42,7 +42,7 @@ spec:
               apiVersion: v1
               kind: Secret
               metadata:
-                name: {{ .Values.app.jwt.secret.name | default "jwt" }}
+                name: {{ .Values.app.jwt.secret.name }}
                 namespace: {{ .Release.Namespace }}
               stringData:
                 private-key: {{ .Values.app.jwt.secret.privateKey | default "NEW_PRIVATEKEY" | quote }}

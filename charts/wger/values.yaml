@@ -45,7 +45,8 @@ app:
   proxyCount: 1
   django:
     secret:
-      name: null
+      name: "django"
+      # null generates a random secret key on first install
       key: null
     cache:
       # in seconds - 60*60*24*15, 15 Days
@@ -57,26 +58,23 @@ app:
     # except you use a existingSecret
     existingDatabase:
       enabled: false
-      engine: null
+      engine: django.db.backends.postgresql
       host: null
       port: null
       dbname: wger
       dbuser: wger
       dbpw: null
       # optionally use a existing secret containing the database credentials
-      # if you don't set a *Key it will look for the following keys
-      # USERDB_USER / USERDB_PASSWORD / USERDB_NAME
-      # in the secret
       existingSecret:
         # name of the secret
         name: null
-        # overrides app.django.existingDatabase.dbname
-        # optional; defaults to app.django.existingDatabase.dbname / "wger"
+        # secret key holding the database name
+        # optional; when null app.django.existingDatabase.dbname is used instead
         dbnameKey: null
-        # overrides app.django.existingDatabase.dbuser
-        dbuserKey: null
-        # overrides app.django.existingDatabase.dbpw
-        dbpwKey: null
+        # secret key holding the database user
+        dbuserKey: USERDB_USER
+        # secret key holding the database password
+        dbpwKey: USERDB_PASSWORD
   # JWT auth
   jwt:
     secret:
@@ -112,7 +110,7 @@ app:
   mail:
     enabled: false
     server: null
-    port: null
+    port: 587
     user: null
     from_email: null
     # Set your name and email to be notified if an internal server error occurs.
@@ -167,7 +165,8 @@ powersync:
     user: "powersync_storage"
     # null for a random password when installing
     pw: null
-  configPath: null
+  configPath: "/config/powersync.yaml"
+  # null derives the URL from the nginx service of this release
   jwksURL: null
   resources: null
     # requests:
@@ -213,7 +212,8 @@ celery:
   flower:
     enabled: false
     secret:
-      name: null
+      name: "flower"
+      # null generates a random password on first install
       password: null
     resources: null
     # requests:
