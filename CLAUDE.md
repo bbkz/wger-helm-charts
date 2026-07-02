@@ -59,7 +59,7 @@ When changing app configuration, prefer editing the `wger.env.default` template 
 
 ### Secret & JWT key handling
 
-Secrets are created via Helm templates annotated as `pre-install,pre-upgrade,pre-rollback` hooks (`secret-*.yaml`). The recurring **generate-or-preserve password pattern**: if a password value is set in `values.yaml`, use it; otherwise on upgrade `lookup` the existing secret and reuse its value, and only `randAlphaNum` a fresh one on first install. Follow this pattern (see `secret-powersync.yaml`, `secret-redis.yaml`) for any new generated credential.
+Secrets are created via Helm templates annotated as `pre-install,pre-upgrade,pre-rollback` hooks (`secret-*.yaml`). The **generate-or-preserve password pattern** lives in the `wger.secretValue` helper (`_helpers.tpl`): if a value is set in `values.yaml`, use it; otherwise `lookup` the existing secret and reuse its value; only `randAlphaNum` a fresh one when neither exists. Use this helper (see `secret-django.yaml` for the simplest call) for any new generated credential.
 
 JWT keys are special: `templates/hooks/jwt-keygen.yaml` runs a **pre-install/upgrade Job** that uses `jose` + `kubectl apply` to generate RS256 JWK keys and write the `jwt` secret. The `manipulatejwt` / `manipulatemail` helpers in `_helpers.tpl` decide (returning the string `"doit"`) whether a secret should be (re)generated based on existence and the `*.secret.update` flag.
 

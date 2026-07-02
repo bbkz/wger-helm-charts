@@ -363,6 +363,28 @@ environment:
 {{- end }}
 
 {{/*
+ generate-or-preserve secret value
+ - if a value is configured in values.yaml, use it
+ - otherwise reuse the value from the existing secret (upgrades)
+ - otherwise generate a random one (first install)
+ Call with: (dict "ctx" $ "name" <secret name> "key" <secret key>
+                  "value" <configured value> "length" <random length>)
+ Returns the plain (not base64 encoded) value.
+*/}}
+{{- define "wger.secretValue" -}}
+{{- if .value -}}
+{{- .value -}}
+{{- else -}}
+{{- $data := (lookup "v1" "Secret" .ctx.Release.Namespace .name).data -}}
+{{- if and $data (index $data .key) -}}
+{{- index $data .key | b64dec -}}
+{{- else -}}
+{{- randAlphaNum (.length | int) -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
  checksum over all values that end up in secrets referenced by the pods.
  Used as a pod template annotation so pods restart when a secret's content
  changes: secret values are resolved at container start via secretKeyRef,
