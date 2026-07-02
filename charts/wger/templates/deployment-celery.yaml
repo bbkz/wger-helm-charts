@@ -81,7 +81,7 @@ spec:
       volumes:
         - name: wger-celery-beat
           persistentVolumeClaim:
-            claimName: {{ .Values.app.persistence.existingClaim.celeryBeat | default "wger-celery-beat" | quote }}
+            claimName: {{ .Values.app.persistence.existingClaim.celeryBeat | default (print .Release.Name "-celery-beat") | quote }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -156,8 +156,8 @@ spec:
       volumes:
         - name: wger-media
           persistentVolumeClaim:
-            claimName: {{ .Values.app.persistence.existingClaim.media | default "wger-media" | quote }}
+            claimName: {{ .Values.app.persistence.existingClaim.media | default (print .Release.Name "-media") | quote }}
         - name: wger-celery-beat
           persistentVolumeClaim:
-            claimName: {{ .Values.app.persistence.existingClaim.celeryBeat | default "wger-celery-beat" | quote }}
+            claimName: {{ .Values.app.persistence.existingClaim.celeryBeat | default (print .Release.Name "-celery-beat") | quote }}
 {{- end }}

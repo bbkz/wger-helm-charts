@@ -44,7 +44,8 @@ app:
     port: 8000
   django:
     secret:
-      name: "django"
+      # null defaults to <release>-django
+      name: null
       # null generates a random secret key on first install
       key: null
     cache:
@@ -79,7 +80,8 @@ app:
     # image for the keygen hook job (needs apk to install jose/python3/kubectl)
     keygenImage: docker.io/alpine:3.22
     secret:
-      name: "jwt"
+      # null defaults to <release>-jwt
+      name: null
       # JWT keys, used by the mobile app.
       # Officaly you can generate fresh keys with: docker compose exec web ./manage.py generate-jwt-keys
       #
@@ -118,7 +120,8 @@ app:
     # don't set django_admins when not needed
     django_admins: null
     secret:
-      name: mail
+      # null defaults to <release>-mail
+      name: null
       key: mail-password
       password: null
       update: false
@@ -212,7 +215,8 @@ celery:
   flower:
     enabled: false
     secret:
-      name: "flower"
+      # null defaults to <release>-flower
+      name: null
       # null generates a random password on first install
       password: null
     resources: null
@@ -290,14 +294,16 @@ redis:
     # default no password set, this will randomly create
     # one upon first installation
     # password: XXXXXXXXXXXXXXXXXX
-  # Uncomment the following to enable password authentication:
+  # Uncomment the following to enable password authentication
+  # (replace <release> with your helm release name; the secret is
+  # created by this chart as <release>-redis):
   #
   # # Additional environment variables (Redis server and Sentinel)
   # env:
   #   - name: REDIS_PASSWORD
   #     valueFrom:
   #       secretKeyRef:
-  #         name: redis
+  #         name: <release>-redis
   #         key: redis-password
   # # Arguments for the container entrypoint process (Redis server)
   # args:

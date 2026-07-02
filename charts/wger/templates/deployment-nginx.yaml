@@ -56,10 +56,10 @@ spec:
       volumes:
         - name: wger-media
           persistentVolumeClaim:
-            claimName: {{ .Values.app.persistence.existingClaim.media | default "wger-media" | quote }}
+            claimName: {{ .Values.app.persistence.existingClaim.media | default (print .Release.Name "-media") | quote }}
         - name: wger-static
           persistentVolumeClaim:
-            claimName: {{ .Values.app.persistence.existingClaim.static | default "wger-static" | quote }}
+            claimName: {{ .Values.app.persistence.existingClaim.static | default (print .Release.Name "-static") | quote }}
         - name: nginx-conf
           configMap:
             name: {{ .Release.Name }}-nginx-configmap

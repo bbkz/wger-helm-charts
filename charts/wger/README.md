@@ -72,7 +72,7 @@ For additional configuration of the Groundhog2k's PostgreSQL and Redis charts, p
 | `app.mail.port`          | Mailserver Port                              | String  | `587`           |
 | `app.mail.user`          | Mailserver User                              | String  | `null`          |
 | `app.mail.from_email`    | From Email Address                           | String  | `null`          |
-| `app.mail.secret.name`   | Name of the secret for the mail password     | String  | `mail`          |
+| `app.mail.secret.name`   | Name of the secret for the mail password     | String  | `<release>-mail`          |
 | `app.mail.secret.key`    | Key in the secret used for the mail password | String  | `mail-password` |
 | `app.mail.secret.update` | Enable or disable changes to the secret with the values | Boolean | `false` |
 | `app.mail.django_admins` | Django admins to receive internal server error, don't enable it when not needed | String | `null` |
@@ -82,7 +82,7 @@ For additional configuration of the Groundhog2k's PostgreSQL and Redis charts, p
 
 | Name                                                   | Description                          | Type   | Default Value |
 |--------------------------------------------------------|--------------------------------------|--------|---------------|
-| `app.django.secret.name`                               | Name of the secret                   | String | `django` |
+| `app.django.secret.name`                               | Name of the secret                   | String | `<release>-django` |
 | `app.django.secret.key`                                | Key for the `SECRET_KEY`             | String | `randAlphaNum 50` |
 | `app.django.cache.timeout`                             | Cache timeout in seconds             | String | `1296000` |
 | `app.django.existingDatabase.enabled`                  | Enable existing database, you need to set `postgres.enabled: false` | Boolean | `false` |
@@ -126,7 +126,7 @@ Celery requires persistent volumes.
 | `celery.warmupExercisesCacheAll` | warmup all exercises          | Boolean    | `True`            |
 | `celery.ingredientsFrom`         | source for ingredients, possible values `WGER`,`OFF` | String  | `WGER`  |
 | `celery.flower.enabled`          | enable flower webinterface for celery | Boolean    | `False`   |
-| `celery.flower.secret.name`      | Name of the secret            | String     | `flower`          |
+| `celery.flower.secret.name`      | Name of the secret            | String     | `<release>-flower`          |
 | `celery.flower.secret.password`  | Password for the webinterface | String     | `randAlphaNum 50` |
 
 
@@ -135,7 +135,7 @@ Celery requires persistent volumes.
 | Name                           | Description                              | Type    | Default Value     |
 |--------------------------------|------------------------------------------|---------|-------------------|
 | `app.jwt.keygenImage`          | Image used by the JWT keygen hook job    | String  | `docker.io/alpine:3.22` |
-| `app.jwt.secret.name`          | Name of the secret                       | String  | `jwt`             |
+| `app.jwt.secret.name`          | Name of the secret                       | String  | `<release>-jwt`             |
 | `app.jwt.secret.update`        | Update content of the current secret     | Boolean | `false`           |
 | `app.jwt.secret.privateKey`    | Private Key for JWT                      | String  | auto created new key |
 | `app.jwt.secret.publicKey`     | Public Key for JWT                       | String  | auto created new key |

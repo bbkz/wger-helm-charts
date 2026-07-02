@@ -206,13 +206,13 @@ environment:
   - name: SECRET_KEY
     valueFrom:
       secretKeyRef:
-        name: {{ .Values.app.django.secret.name | quote }}
+        name: {{ include "wger.secretName.django" . | quote }}
         key: "secret-key"
   {{- if .Values.app.mail.enabled }}
   - name: EMAIL_HOST_PASSWORD
     valueFrom:
       secretKeyRef:
-        name: {{ .Values.app.mail.secret.name | quote }}
+        name: {{ include "wger.secretName.mail" . | quote }}
         key: {{ .Values.app.mail.secret.key | quote }}
   {{- end }}
   {{- /*
@@ -223,7 +223,7 @@ environment:
   - name: DJANGO_CACHE_CLIENT_PASSWORD
     valueFrom:
       secretKeyRef:
-        name: "redis"
+        name: {{ print .Release.Name "-redis" | quote }}
         key: "redis-password"
   - name: CELERY_BROKER
     value: "redis://:$(DJANGO_CACHE_CLIENT_PASSWORD)@{{ .Release.Name }}-redis:{{ int .Values.redis.service.serverPort }}/2"
@@ -239,7 +239,7 @@ environment:
   - name: CELERY_FLOWER_PASSWORD
     valueFrom:
       secretKeyRef:
-        name: {{ .Values.celery.flower.secret.name | quote }}
+        name: {{ include "wger.secretName.flower" . | quote }}
         key: "password"
   {{- end }}
 {{- end }}
@@ -302,12 +302,12 @@ environment:
   - name: JWT_PRIVATE_KEY
     valueFrom:
       secretKeyRef:
-        name: {{ .Values.app.jwt.secret.name | quote }}
+        name: {{ include "wger.secretName.jwt" . | quote }}
         key: "private-key"
   - name: JWT_PUBLIC_KEY
     valueFrom:
       secretKeyRef:
-        name: {{ .Values.app.jwt.secret.name | quote }}
+        name: {{ include "wger.secretName.jwt" . | quote }}
         key: "public-key"
   # This is the path (inside the container) to the YAML config file
   # Alternatively the config path can be specified in the command
@@ -340,12 +340,12 @@ environment:
   - name: PS_DB_USER
     valueFrom:
       secretKeyRef:
-        name:  "powersync"
+        name: {{ print .Release.Name "-powersync" | quote }}
         key: "user"
   - name: PS_DB_PASSWORD
     valueFrom:
       secretKeyRef:
-        name:  "powersync"
+        name: {{ print .Release.Name "-powersync" | quote }}
         key: "pw"
   - name: PS_STORAGE_PG_URI
     value: "postgres://$(PS_DB_USER):$(PS_DB_PASSWORD)@$(DJANGO_DB_HOST):$(DJANGO_DB_PORT)/$(DJANGO_DB_DATABASE)"
@@ -387,12 +387,31 @@ environment:
 {{- end }}
 
 {{/*
+ secret names: user override from values, or a release-prefixed default
+*/}}
+{{- define "wger.secretName.django" -}}
+{{- .Values.app.django.secret.name | default (print .Release.Name "-django") -}}
+{{- end -}}
+{{- define "wger.secretName.mail" -}}
+{{- .Values.app.mail.secret.name | default (print .Release.Name "-mail") -}}
+{{- end -}}
+{{- define "wger.secretName.jwt" -}}
+{{- .Values.app.jwt.secret.name | default (print .Release.Name "-jwt") -}}
+{{- end -}}
+{{- define "wger.secretName.flower" -}}
+{{- .Values.celery.flower.secret.name | default (print .Release.Name "-flower") -}}
+{{- end -}}
+
+{{/*
  generate-or-preserve secret value
  - if a value is configured in values.yaml, use it
  - otherwise reuse the value from the existing secret (upgrades)
  - otherwise generate a random one (first install)
  Call with: (dict "ctx" $ "name" <secret name> "key" <secret key>
                   "value" <configured value> "length" <random length>)
+ Optional: "legacyName" — pre-2.0 unprefixed secret name; its value is
+ reused once when the release-prefixed secret does not exist yet, so
+ upgrades keep their generated passwords.
  Returns the plain (not base64 encoded) value.
 */}}
 {{- define "wger.secretValue" -}}
@@ -400,6 +419,9 @@ environment:
 {{- .value -}}
 {{- else -}}
 {{- $data := (lookup "v1" "Secret" .ctx.Release.Namespace .name).data -}}
+{{- if and .legacyName (not (and $data (index $data .key))) -}}
+{{- $data = (lookup "v1" "Secret" .ctx.Release.Namespace .legacyName).data -}}
+{{- end -}}
 {{- if and $data (index $data .key) -}}
 {{- index $data .key | b64dec -}}
 {{- else -}}
@@ -450,7 +472,7 @@ rollme: {{ randAlphaNum 5 | quote }}
 */}}
 # jwt secret
 {{- define "manipulatejwt" -}}
-{{- if (lookup "v1" "Secret" .Release.Namespace .Values.app.jwt.secret.name) -}}
+{{- if (lookup "v1" "Secret" .Release.Namespace (include "wger.secretName.jwt" .)) -}}
   {{- if .Values.app.jwt.secret.update -}}
 doit
   {{- end -}}
@@ -460,7 +482,7 @@ doit
 {{- end -}}
 # mail secret
 {{- define "manipulatemail" -}}
-{{- if (lookup "v1" "Secret" .Release.Namespace .Values.app.mail.secret.name) -}}
+{{- if (lookup "v1" "Secret" .Release.Namespace (include "wger.secretName.mail" .)) -}}
   {{- if .Values.app.mail.secret.update -}}
     {{- if .Values.app.mail.secret.password -}}
 doit

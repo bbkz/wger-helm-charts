@@ -2,6 +2,10 @@
 # extra init script for the in-cluster postgres (mounted via the
 # postgres.extraScripts value): the wger DB user needs superuser rights for
 # some django migrations and for the powersync storage setup
+#
+# NOTE: deliberately NOT release-prefixed — the name must match the static
+# postgres.extraScripts value, and subchart values cannot be templated.
+# Consequence: two releases sharing a namespace conflict on this ConfigMap.
 kind: ConfigMap
 apiVersion: v1
 metadata:
