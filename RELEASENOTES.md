@@ -1,3 +1,7 @@
+## 1.0.1-alpha
+
+* change readiness probe url
+
 ## 1.0.0
 
 This is a major upgrade and has breaking changes. Please review the
