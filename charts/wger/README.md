@@ -275,10 +275,26 @@ Celery is used to sync exercises or ingredients and has a task to warm up the ca
 
 ```bash
 export POD=$(kubectl get pods -n wger -l "app.kubernetes.io/name=wger-celery-worker" -o jsonpath="{.items[0].metadata.name}")
-kubectl -n wger exec -ti $POD -- celery -A wger events
+kubectl -n wger exec -ti $POD -- bash
 ```
 
 `celery events` is a simple curses monitor displaying task and worker history.
+
+```sh
+celery -A wger events
+```
+
+List all registered tasks:
+
+```sh
+celery -A wger inspect registered
+```
+
+Run a task manually:
+
+```sh
+celery -A wger call wger.exercises.tasks.cache_api_exercises_task
+```
 
 
 #### Flower Webinterface
@@ -286,7 +302,7 @@ kubectl -n wger exec -ti $POD -- celery -A wger events
 If you have flower enabled, you can use port forwarding to connect to the web interface.
 
 ```bash
-export POD=$(kubectl get pods -n wger -l "app.kubernetes.io/name=wger-celery-worker" -o jsonpath="{.items[0].metadata.name}")
+export POD=$(kubectl get pods -n wger -l "app.kubernetes.io/name=wger-celery" -o jsonpath="{.items[0].metadata.name}")
 kubectl -n wger port-forward ${POD} 8080:5555
 ```
 
@@ -318,6 +334,16 @@ To temporary disable privacy mode to see the blocked ip in the log you can login
 echo "AXES_SENSITIVE_PARAMETERS = []" >>settings.py
 ```
 
+
+## Powersync
+
+* https://wger.readthedocs.io/en/latest/administration/powersync.html
+
+PowerSync’s self-hosted service does not ship with a built-in scheduler. You have to invoke compaction yourself, typically from cron. A daily run is a reasonable default; instances with very high write volume on workout logs or nutrition logs can run it hourly.
+
+Compaction runs online, clients can keep syncing while it is in progress.
+
+@todo add a job to do that.
 
 ## Upgrading
 
