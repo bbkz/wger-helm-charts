@@ -93,7 +93,7 @@ spec:
           # have finished
           readinessProbe:
             httpGet:
-              path: /
+              path: /en/software/features
               port: app
             periodSeconds: 5
           {{- if .Values.app.resources }}
